@@ -30,10 +30,10 @@ async def initialize_rag():
             "options": {"num_ctx": 32768},
         },
         embedding_func=EmbeddingFunc(
-            embedding_dim=768,
-            max_token_size=512,
+            embedding_dim=1536,
+            max_token_size=8192,
             func=lambda texts: ollama_embed(
-                texts, embed_model="aerok/xiaobu-embedding-v2", host="http://localhost:11434"
+                texts, embed_model="gte-Qwen2-1.5B-instruct", host="http://localhost:11434"
             ),
         ),
     )

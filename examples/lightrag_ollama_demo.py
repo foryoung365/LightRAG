@@ -10,7 +10,7 @@ from lightrag.llm.ollama import ollama_model_complete, ollama_embed
 from lightrag.utils import EmbeddingFunc
 from lightrag.kg.shared_storage import initialize_pipeline_status
 
-WORKING_DIR = "./dickens"
+WORKING_DIR = "/content/drive/MyDrive/mykd_guide"
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
 
@@ -22,7 +22,7 @@ async def initialize_rag():
     rag = LightRAG(
         working_dir=WORKING_DIR,
         llm_model_func=ollama_model_complete,
-        llm_model_name="gemma2:2b",
+        llm_model_name="qwen2.5:7b-instruct-q5_K_M",
         llm_model_max_async=4,
         llm_model_max_token_size=32768,
         llm_model_kwargs={
@@ -31,9 +31,9 @@ async def initialize_rag():
         },
         embedding_func=EmbeddingFunc(
             embedding_dim=768,
-            max_token_size=8192,
+            max_token_size=512,
             func=lambda texts: ollama_embed(
-                texts, embed_model="nomic-embed-text", host="http://localhost:11434"
+                texts, embed_model="aerok/xiaobu-embedding-v2", host="http://localhost:11434"
             ),
         ),
     )
@@ -54,41 +54,41 @@ def main():
     rag = asyncio.run(initialize_rag())
 
     # Insert example text
-    with open("./book.txt", "r", encoding="utf-8") as f:
+    with open("/content/drive/MyDrive/guide.md", "r", encoding="utf-8") as f:
         rag.insert(f.read())
 
     # Test different query modes
     print("\nNaive Search:")
     print(
         rag.query(
-            "What are the top themes in this story?", param=QueryParam(mode="naive")
+            "游戏中有哪些职业?", param=QueryParam(mode="naive")
         )
     )
 
     print("\nLocal Search:")
     print(
         rag.query(
-            "What are the top themes in this story?", param=QueryParam(mode="local")
+            "游戏中有哪些职业?", param=QueryParam(mode="local")
         )
     )
 
     print("\nGlobal Search:")
     print(
         rag.query(
-            "What are the top themes in this story?", param=QueryParam(mode="global")
+            "游戏中有哪些职业?", param=QueryParam(mode="global")
         )
     )
 
     print("\nHybrid Search:")
     print(
         rag.query(
-            "What are the top themes in this story?", param=QueryParam(mode="hybrid")
+            "游戏中有哪些职业?", param=QueryParam(mode="hybrid")
         )
     )
 
     # stream response
     resp = rag.query(
-        "What are the top themes in this story?",
+        "游戏中有哪些职业?",
         param=QueryParam(mode="hybrid", stream=True),
     )
 
